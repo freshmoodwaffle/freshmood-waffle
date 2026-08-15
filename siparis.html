@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FreshMood Waffle • Kendi Waffle'ını Oluştur</title>
+<style>
+:root{--purple:#56106d;--pink:#e80067;--soft:#fff7fb;--ink:#2b1531;--gold:#ffbd00;--line:#ead8ee}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#fff7fb,#f6e9fa);color:var(--ink);font-family:Arial,Helvetica,sans-serif;padding-bottom:105px}
+.top{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:14px 16px}.brand{text-align:center;color:var(--purple);font-weight:900;font-size:25px}.brand span{color:var(--pink);font-size:12px;letter-spacing:4px;display:block;margin-top:3px}
+.wrap{max-width:680px;margin:auto;padding:14px}.hero{background:linear-gradient(135deg,#56106d,#8e208f);color:#fff;border-radius:24px;padding:22px 18px;box-shadow:0 14px 35px #56106d28}.hero h1{margin:0 0 7px;font-size:25px}.hero p{margin:0;opacity:.92;font-size:14px;line-height:1.45}
+.sec{margin-top:18px}.sec h2{font-size:18px;margin:0 0 10px}.hint{font-size:12px;color:#7c657f;margin:-4px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.choice{position:relative;background:#fff;border:2px solid #ead8ee;border-radius:18px;padding:12px;min-height:132px;cursor:pointer;transition:.15s;box-shadow:0 5px 16px #56106d0b}.choice.selected{border-color:var(--pink);box-shadow:0 7px 20px #e8006722;background:#fff8fc}.choice input{position:absolute;opacity:0;pointer-events:none}.tick{position:absolute;right:9px;top:9px;width:25px;height:25px;border-radius:50%;border:2px solid #d7c6dc;background:#fff;display:grid;place-items:center;font-size:15px;font-weight:900}.selected .tick{background:var(--pink);border-color:var(--pink);color:#fff}.pic{height:68px;display:flex;align-items:center;justify-content:center;font-size:48px;margin-bottom:6px}.name{font-weight:800;font-size:14px;line-height:1.2}.price{font-size:13px;color:var(--purple);font-weight:900;margin-top:5px}.free{color:#438f45}.premium{color:#d35b00}
+.limit{display:inline-block;background:#f2e7f5;border-radius:999px;padding:4px 9px;font-size:11px;font-weight:700;color:#6d4b73;margin-bottom:8px}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:30;background:#fff;border-top:1px solid var(--line);box-shadow:0 -10px 30px #56106d18;padding:10px max(14px,env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;justify-content:center}.total{font-weight:900;color:var(--purple);min-width:100px;display:flex;align-items:center;justify-content:center}.next{border:0;border-radius:15px;background:linear-gradient(135deg,#56106d,#8e208f);color:#fff;padding:14px 20px;font-weight:900;font-size:15px;flex:1;max-width:360px}.next:disabled{opacity:.45}
+.modal{display:none;position:fixed;inset:0;background:#1f1025a8;z-index:50;padding:20px;align-items:flex-end}.modal.show{display:flex}.sheet{background:#fff;border-radius:24px 24px 10px 10px;padding:20px;width:100%;max-width:680px;margin:auto;max-height:82vh;overflow:auto}.sheet h2{margin-top:0}.summary{background:#faf3fc;border-radius:16px;padding:14px;line-height:1.65;font-size:14px}.actions{display:flex;gap:10px;margin-top:14px}.actions button{flex:1;border:0;border-radius:14px;padding:13px;font-weight:800}.close{background:#eee}.copy{background:var(--pink);color:#fff}.note{font-size:11px;color:#806b83;margin-top:10px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">FreshMood <span>WAFFLE</span></div></header>
+<main class="wrap">
+<section class="hero"><h1>Kendi Waffle'ını Kendin Oluştur 💜</h1><p>Önce waffle'ını seç, sonra meyve, çikolata ve süslemelerini dokunarak işaretle. Seçtikçe toplam fiyat otomatik hesaplanır.</p></section>
+
+<section class="sec"><h2>1. Waffle'ını seç</h2><div class="grid" id="waffles"></div></section>
+<section class="sec"><h2>2. Meyvelerini seç <span class="limit">En fazla 2</span></h2><div class="grid" id="fruits"></div></section>
+<section class="sec"><h2>3. Çikolatanı seç <span class="limit">2 çeşit</span></h2><div class="hint">Standart çikolatalar ücretsiz. Premium çikolatalar +30 TL / çeşit.</div><div class="grid" id="chocolates"></div></section>
+<section class="sec"><h2>4. Süslemelerini seç <span class="limit">En fazla 5</span></h2><div class="grid" id="toppings"></div></section>
+</main>
+
+<div class="bottom"><div class="total" id="total">0 TL</div><button class="next" id="finish" disabled>Siparişi Hazırla</button></div>
+
+<div class="modal" id="modal"><div class="sheet"><h2>Sipariş Özeti 🧇</h2><div class="summary" id="summary"></div><div class="actions"><button class="close" id="close">Geri Dön</button><button class="copy" id="copy">Özeti Kopyala</button></div><div class="note">Bu demo seçim ve fiyat hesaplamasını test etmek içindir. Ödeme/sipariş gönderme bağlantısını sonraki aşamada ekleyebiliriz.</div></div></div>
+
+<script>
+const data={
+ waffles:[
+  ['kova750','🪣','Kova Waffle • Büyük','350 TL',350],['kova500','🪣','Kova Waffle • Orta','250 TL',250],['mini','🍫','Kova Waffle • Mini Çocuk','100 TL',100],['bardak500','🥤','Bardak Waffle • Büyük','250 TL',250],['bardak350','🥤','Bardak Waffle • Küçük','200 TL',200],['meyve','🍓','Meyve Bardağı • Küçük','250 TL',250]
+ ],
+ fruits:[['çilek','🍓','Çilek'],['muz','🍌','Muz']],
+ chocolates:[['sütlü','🍫','Sütlü','Standart • Ücretsiz',0],['beyaz','🤍','Beyaz','Standart • Ücretsiz',0],['bitter','🍫','Bitter','Standart • Ücretsiz',0],['karamel','🍮','Karamel','Premium • +30 TL',30],['frambuaz','🩷','Frambuaz','Premium • +30 TL',30],['antep','💚','Antep Fıstıklı','Premium • +30 TL',30],['bubble','💙','Bubble Gum','Premium • +30 TL',30]],
+ toppings:[['damla','🟤','Damla Çikolata'],['bitterdamla','⚫','Bitter Çikolata'],['beyazdamla','⚪','Beyaz Çikolata'],['frambuzdamla','🔴','Frambuaz Çikolata'],['pirincbitter','🟤','Pirinç Patlağı Bitter'],['pirincfistik','⚪','Pirinç Patlağı Fıstık'],['pirincframbuaz','🩷','Pirinç Patlağı Frambuaz'],['pirincsutlu','🟤','Pirinç Patlağı Sütlü'],['cakiltasi','🟣','Çakıltaşı Minik'],['minibon','🌈','Minibon'],['krep','🟠','Krep Kırığı Sade'],['krepor','🟠','Krep Kırığı Portakal'],['krepantep','💚','Krep Kırığı Antep'],['krepçilek','❤️','Krep Kırığı Çilekli'],['lotus','🍪','Lotus Kırığı'],['oreo','⚫','Oreo Kırığı'],['bebe','🍪','Bebe Bisküvisi'],['cocopops','🟤','Cocopops Kırıntıları'],['hindistan','⚪','Hindistan Cevizi']]
+};
+const state={waffle:null,fruits:[],chocolates:[],toppings:[]};
+function card(item,type){const [id,emoji,name,extra,price]=item;const c=document.createElement('label');c.className='choice';c.dataset.id=id;c.dataset.type=type;c.innerHTML=`<input type="checkbox"><span class="tick">✓</span><div class="pic">${emoji}</div><div class="name">${name}</div>${extra?`<div class="price ${price===0?'free':price>0?'premium':''}">${extra}</div>`:''}`;c.addEventListener('click',e=>{e.preventDefault();toggle(id,type,c,price||0)});return c}
+function render(id,items,type){const el=document.getElementById(id);items.forEach(x=>el.appendChild(card(x,type)))}
+function toggle(id,type,el,price){if(type==='waffle'){document.querySelectorAll(`[data-type="waffle"]`).forEach(x=>x.classList.remove('selected'));state.waffle=id;el.classList.add('selected')}
+else{let arr=state[type];const max=type==='fruits'?2:type==='chocolates'?2:5;const i=arr.indexOf(id);if(i>=0){arr.splice(i,1);el.classList.remove('selected')}else{if(arr.length>=max){alert(`Bu bölümde en fazla ${max} seçim yapabilirsiniz.`);return}arr.push(id);el.classList.add('selected')}}update()}
+function price(){let p=data.waffles.find(x=>x[0]===state.waffle)?.[4]||0;state.chocolates.forEach(id=>p+=data.chocolates.find(x=>x[0]===id)?.[4]||0);return p}
+function update(){document.getElementById('total').textContent=price()+' TL';document.getElementById('finish').disabled=!state.waffle}
+function names(items,ids){return ids.map(id=>items.find(x=>x[0]===id)?.[2]).filter(Boolean)}
+function openSummary(){const w=data.waffles.find(x=>x[0]===state.waffle);document.getElementById('summary').innerHTML=`<b>Waffle:</b> ${w[2]} — ${w[4]} TL<br><b>Meyve:</b> ${names(data.fruits,state.fruits).join(', ')||'Seçilmedi'}<br><b>Çikolata:</b> ${names(data.chocolates,state.chocolates).join(', ')||'Seçilmedi'}<br><b>Süsleme:</b> ${names(data.toppings,state.toppings).join(', ')||'Seçilmedi'}<hr><b>TOPLAM: ${price()} TL</b>`;document.getElementById('modal').classList.add('show')}
+document.getElementById('finish').onclick=openSummary;document.getElementById('close').onclick=()=>document.getElementById('modal').classList.remove('show');document.getElementById('copy').onclick=()=>{const w=data.waffles.find(x=>x[0]===state.waffle);const t=`FreshMood Waffle Siparişi\nWaffle: ${w[2]} — ${w[4]} TL\nMeyve: ${names(data.fruits,state.fruits).join(', ')||'Yok'}\nÇikolata: ${names(data.chocolates,state.chocolates).join(', ')||'Yok'}\nSüsleme: ${names(data.toppings,state.toppings).join(', ')||'Yok'}\nTOPLAM: ${price()} TL`;navigator.clipboard?.writeText(t).then(()=>alert('Sipariş özeti kopyalandı.'))};
+render('waffles',data.waffles,'waffle');render('fruits',data.fruits,'fruits');render('chocolates',data.chocolates,'chocolates');render('toppings',data.toppings,'toppings');
+</script>
+</body></html>
